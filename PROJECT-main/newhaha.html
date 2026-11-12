@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AIR READ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #334155 70%, #1e293b 100%);
+            color: #f8fafc;
+            font-family: "Inter", "Segoe UI", sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #fff;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            color: rgba(248, 250, 252, 0.8) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #38bdf8 !important;
+        }
+
+        .hero {
+            padding: 120px 0;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero small {
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #38bdf8;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            color: #94a3b8;
+            max-width: 600px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .btn-common {
+            border-radius: 50px;
+            padding: 14px 36px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-airread {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-airread:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-voicetotext {
+            background: #fff;
+            color: #0f172a;
+            border: none;
+        }
+
+        .btn-voicetotext:hover {
+            background: #f1f5f9;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-texttovoice {
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-texttovoice:hover {
+            filter: brightness(1.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        #logoutBtn {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        #logoutBtn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+
+            .btn-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark px-4">
+        <a class="navbar-brand" href="#">AIR READ</a>
+        <div class="ms-auto d-flex align-items-center gap-4">
+            <button id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="container hero">
+        <div>
+            <small class="text-secondary">WHY THIS TYPE OF READ STYLE</small>
+            <h1 class="mt-3">
+                Touch-free interaction<br>
+                Improved accessibility<br>
+                Efficient presentations
+            </h1>
+            <p class="mt-3">
+                A hand gesture–controlled PDF reader allows users to navigate pages, zoom, and scroll using simple hand
+                movements captured by a camera, enabling completely touch-free interaction. It improves accessibility
+                and user convenience, especially in presentations, smart classrooms, and hands-busy environments.
+            </p>
+            <div class="btn-container">
+                <button id="getInTouchBtn" class="btn-common btn-airread" onclick="launchApp('vnmforedit')">
+                    <i class="fas fa-hand-holding"></i> AIR READ
+                </button>
+                <button id="voiceToTextBtn" class="btn-common btn-voicetotext" onclick="launchApp('voicetotext')">
+                    <i class="fas fa-microphone"></i> VOICE TO TEXT
+                </button>
+                <button id="textToVoiceBtn" class="btn-common btn-texttovoice" onclick="launchApp('fixedupload')">
+                    <i class="fas fa-volume-up"></i> TEXT TO VOICE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Unified Application Launcher
+        async function launchApp(appName) {
+            console.log('Attempting to launch:', appName);
+
+            // Show feedback
+            const btn = event.currentTarget;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Launching...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/launch-app', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ app: appName })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    console.log(`${appName} launched, PID:`, result.pid);
+                } else {
+                    throw new Error(result.error || 'Launch failed');
+                }
+            } catch (error) {
+                console.error('Launch error:', error);
+                alert(`❌ Error starting ${appName}: ${error.message}`);
+            } finally {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
+        }
+
+        // Check authentication on page load
+        (function () {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+
+            console.log('Checking authentication...');
+            console.log('Token:', token ? 'exists' : 'missing');
+            console.log('Username:', username || 'missing');
+
+            if (!token || !username) {
+                // No token found, redirect to login page
+                console.log('No authentication found, redirecting to login...');
+                window.location.replace('login.html');
+                return;
+            }
+
+            // Verify token with server
+            fetch('/api/verify-token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ username: username })
+            }).then(response => {
+                if (response.ok) {
+                    console.log('User is authenticated, loading application...');
+                } else {
+                    console.log('Token invalid, redirecting to login...');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('username');
+                    window.location.replace('login.html');
+                }
+            }).catch(error => {
+                console.warn('Could not verify token, but continuing anyway:', error);
+                console.log('User is authenticated, loading application...');
+            });
+        })();
+
+        // Logout behavior: clear token and return to login page
+        (function () {
+            const btn = document.getElementById('logoutBtn');
+            if (!btn) return;
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                try {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('username');
+                    console.log('Token and username cleared, redirecting to login...');
+                } catch (e) {
+                    console.warn('Could not clear storage:', e);
+                }
+                // Force redirect to login page
+                window.location.replace('login.html');
+            });
+        })();
+    </script>
+</body>
+
+</html>
